@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TL Elect Services</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #0d3b8c;
+    --blue-dark: #072660;
+    --orange: #f26522;
+    --orange-light: #ff7a35;
+    --white: #ffffff;
+    --gray: #f4f6fb;
+    --text: #1a1a2e;
+    --border: #e0e7f3;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Outfit', sans-serif; background: var(--gray); color: var(--text); min-height: 100vh; }
+
+  /* NAV */
+  nav {
+    background: var(--blue-dark); padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px; position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+  }
+  .logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--white); letter-spacing: 2px; display: flex; align-items: center; gap: 8px; }
+  .logo span { color: var(--orange); }
+  .nav-btns { display: flex; gap: 10px; }
+  .nav-btn { padding: 8px 20px; border-radius: 6px; border: none; cursor: pointer; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 0.9rem; transition: all 0.2s; }
+  .nav-btn.active { background: var(--orange); color: white; }
+  .nav-btn.inactive { background: transparent; color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.2); }
+  .nav-btn.inactive:hover { background: rgba(255,255,255,0.1); color: white; }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue) 60%, #1a4fa0 100%);
+    color: white; padding: 5rem 2rem 4rem; text-align: center; position: relative; overflow: hidden;
+  }
+  .hero::before { content: ''; position: absolute; top: -50%; right: -20%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(242,101,34,0.15) 0%, transparent 70%); border-radius: 50%; }
+  .lightning { font-size: 3rem; display: block; margin-bottom: 0.5rem; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+  .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 8vw, 5rem); letter-spacing: 4px; line-height: 1; margin-bottom: 0.5rem; }
+  .hero h1 span { color: var(--orange); }
+  .hero-sub { font-size: 1.1rem; opacity: 0.85; max-width: 500px; margin: 0 auto 2.5rem; font-weight: 300; line-height: 1.6; }
+  .hero-cta { display: inline-block; background: var(--orange); color: white; padding: 14px 36px; border-radius: 50px; font-weight: 700; font-size: 1rem; cursor: pointer; border: none; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 20px rgba(242,101,34,0.4); }
+  .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(242,101,34,0.5); }
+
+  /* SERVICES */
+  .services-section { padding: 3rem 2rem; max-width: 900px; margin: 0 auto; }
+  .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--blue-dark); letter-spacing: 2px; margin-bottom: 0.3rem; }
+  .section-line { width: 50px; height: 4px; background: var(--orange); border-radius: 2px; margin-bottom: 2rem; }
+  .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+  .service-card { background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 12px rgba(13,59,140,0.08); border-left: 4px solid var(--orange); transition: transform 0.2s, box-shadow 0.2s; }
+  .service-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(13,59,140,0.12); }
+  .service-icon { font-size: 1.8rem; margin-bottom: 0.7rem; }
+  .service-card h3 { font-size: 0.95rem; font-weight: 600; color: var(--blue-dark); line-height: 1.4; }
+
+  /* FORM */
+  .form-section { padding: 3rem 2rem; max-width: 600px; margin: 0 auto; }
+  .form-card { background: white; border-radius: 16px; padding: 2.5rem; box-shadow: 0 4px 30px rgba(13,59,140,0.1); }
+  .form-row { margin-bottom: 1.2rem; }
+  label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--blue-dark); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  input, select, textarea { width: 100%; padding: 12px 14px; border: 2px solid var(--border); border-radius: 8px; font-family: 'Outfit', sans-serif; font-size: 0.95rem; color: var(--text); transition: border-color 0.2s; background: #fafbff; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--orange); background: white; }
+  textarea { resize: vertical; min-height: 80px; }
+  .submit-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--orange) 0%, var(--orange-light) 100%); color: white; border: none; border-radius: 10px; font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; box-shadow: 0 4px 15px rgba(242,101,34,0.3); margin-top: 0.5rem; }
+  .submit-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(242,101,34,0.4); }
+  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .alert { border-radius: 10px; padding: 1rem 1.2rem; margin-top: 1rem; font-weight: 500; font-size: 0.9rem; display: none; }
+  .alert.success { background: #e8f5e9; border: 2px solid #4caf50; color: #2e7d32; }
+  .alert.error { background: #ffebee; border: 2px solid #ef5350; color: #c62828; }
+
+  .contact-bar { background: var(--blue-dark); color: white; text-align: center; padding: 1.5rem 2rem; font-size: 1rem; }
+  .contact-bar a { color: var(--orange); text-decoration: none; font-weight: 700; }
+
+  /* ADMIN */
+  .admin-page { background: #f0f2f8; min-height: 100vh; }
+  .admin-header { background: white; padding: 1.5rem 2rem; border-bottom: 3px solid var(--orange); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+  .admin-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; color: var(--blue-dark); letter-spacing: 2px; }
+  .admin-title span { color: var(--orange); }
+
+  .stats-bar { display: flex; gap: 1rem; padding: 1.5rem 2rem; flex-wrap: wrap; }
+  .stat-card { background: white; border-radius: 10px; padding: 1rem 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.06); min-width: 120px; text-align: center; }
+  .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--blue-dark); line-height: 1; }
+  .stat-num.orange { color: var(--orange); }
+  .stat-num.green { color: #4caf50; }
+  .stat-label { font-size: 0.75rem; color: #888; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+
+  .admin-toolbar { padding: 0 2rem 1rem; display: flex; gap: 0.8rem; flex-wrap: wrap; align-items: center; }
+  .filter-btn { padding: 7px 16px; border-radius: 20px; border: 2px solid var(--border); background: white; cursor: pointer; font-family: 'Outfit', sans-serif; font-size: 0.82rem; font-weight: 600; transition: all 0.2s; }
+  .filter-btn.active { background: var(--blue-dark); color: white; border-color: var(--blue-dark); }
+  .search-input { padding: 8px 14px; border: 2px solid var(--border); border-radius: 20px; font-family: 'Outfit', sans-serif; font-size: 0.85rem; min-width: 200px; }
+  .search-input:focus { outline: none; border-color: var(--orange); }
+
+  .requests-container { padding: 0 2rem 2rem; }
+  .requests-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; color: var(--blue-dark); letter-spacing: 1px; margin-bottom: 1rem; }
+
+  .request-card { background: white; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border-left: 5px solid var(--blue); transition: box-shadow 0.2s; animation: slideIn 0.3s ease; }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+  .request-card.new { border-left-color: var(--orange); }
+  .request-card.done { border-left-color: #4caf50; opacity: 0.75; }
+
+  .req-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.8rem; flex-wrap: wrap; gap: 0.5rem; }
+  .req-name { font-weight: 700; font-size: 1.05rem; color: var(--blue-dark); }
+  .req-badge { padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .badge-new { background: #fff3e0; color: #e65100; }
+  .badge-done { background: #e8f5e9; color: #2e7d32; }
+  .req-time { font-size: 0.75rem; color: #aaa; }
+
+  .req-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem; margin-bottom: 0.8rem; }
+  .req-field { display: flex; align-items: flex-start; gap: 8px; font-size: 0.9rem; }
+  .req-field-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+  .req-field-label { color: #888; font-size: 0.75rem; display: block; }
+  .req-field-value { color: var(--text); font-weight: 500; }
+  .req-service { background: var(--gray); border-radius: 6px; padding: 8px 12px; font-size: 0.85rem; color: var(--blue-dark); font-weight: 500; margin-bottom: 0.8rem; }
+  .req-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .action-btn { padding: 7px 16px; border-radius: 6px; border: none; cursor: pointer; font-family: 'Outfit', sans-serif; font-size: 0.82rem; font-weight: 600; transition: all 0.2s; }
+  .btn-call { background: #e3f2fd; color: #1565c0; }
+  .btn-call:hover { background: #1565c0; color: white; }
+  .btn-done { background: #e8f5e9; color: #2e7d32; }
+  .btn-done:hover { background: #2e7d32; color: white; }
+  .btn-undo { background: #fff3e0; color: #e65100; }
+  .btn-undo:hover { background: #e65100; color: white; }
+  .btn-delete { background: #ffebee; color: #c62828; }
+  .btn-delete:hover { background: #c62828; color: white; }
+  .btn-refresh { background: var(--blue-dark); color: white; }
+
+  .empty-state { text-align: center; padding: 4rem 2rem; color: #aaa; }
+  .empty-icon { font-size: 4rem; margin-bottom: 1rem; }
+
+  /* LOGIN */
+  .admin-login { max-width: 380px; margin: 4rem auto; padding: 2rem; }
+  .login-card { background: white; border-radius: 16px; padding: 2.5rem; box-shadow: 0 4px 30px rgba(13,59,140,0.12); text-align: center; }
+  .login-card h2 { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--blue-dark); margin-bottom: 0.3rem; letter-spacing: 2px; }
+  .login-card p { color: #888; font-size: 0.9rem; margin-bottom: 2rem; }
+
+  @media (max-width: 480px) {
+    .hero { padding: 3rem 1.5rem 2.5rem; }
+    .form-card { padding: 1.5rem; }
+    .requests-container, .admin-toolbar { padding: 0 1rem 1rem; }
+    .stats-bar { padding: 1rem; }
+  }
+
+  .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.4); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav>
+  <div class="logo">⚡ TL <span>ELECT</span></div>
+  <div class="nav-btns">
+    <button class="nav-btn active" id="btnClient" onclick="showPage('client')">🏠 Accueil</button>
+    <button class="nav-btn inactive" id="btnAdmin" onclick="showPage(adminToken ? 'admin' : 'adminLogin')">🔒 Admin</button>
+  </div>
+</nav>
+
+<!-- ===== PAGE CLIENT ===== -->
+<div id="pageClient" class="page active">
+  <div class="hero">
+    <span class="lightning">⚡</span>
+    <h1>TL <span>ELECT</span><br>SERVICES.</h1>
+    <p class="hero-sub">Service électrique professionnel garantissant sécurité, précision et fiabilité.</p>
+    <button class="hero-cta" onclick="document.getElementById('formSection').scrollIntoView({behavior:'smooth'})">
+      Demander un service
+    </button>
+  </div>
+
+  <div class="services-section">
+    <div class="section-title">NOS SERVICES</div>
+    <div class="section-line"></div>
+    <div class="services-grid">
+      <div class="service-card"><div class="service-icon">🎓</div><h3>Formation en installation électrique moderne (courant fort et faible)</h3></div>
+      <div class="service-card"><div class="service-icon">🔧</div><h3>Maintenance et dépannage des installations électriques et industrielles</h3></div>
+      <div class="service-card"><div class="service-icon">☀️</div><h3>Installation électrique photovoltaïque (panneaux solaires)</h3></div>
+      <div class="service-card"><div class="service-icon">🏗️</div><h3>Installations résidentielles, commerciales, industrielles et démarrage moteur</h3></div>
+    </div>
+  </div>
+
+  <div class="form-section" id="formSection">
+    <div class="section-title">DEMANDE DE SERVICE</div>
+    <div class="section-line"></div>
+    <div class="form-card">
+      <div class="form-row">
+        <label>Votre nom complet *</label>
+        <input type="text" id="clientName" placeholder="Ex: Jean Dupont">
+      </div>
+      <div class="form-row">
+        <label>Numéro de téléphone *</label>
+        <input type="tel" id="clientPhone" placeholder="Ex: 6XXXXXXXX">
+      </div>
+      <div class="form-row">
+        <label>Adresse / Quartier *</label>
+        <input type="text" id="clientAddress" placeholder="Ex: Bastos, Yaoundé">
+      </div>
+      <div class="form-row">
+        <label>Service souhaité *</label>
+        <select id="clientService">
+          <option value="">-- Choisir un service --</option>
+          <option>Formation en installation électrique</option>
+          <option>Maintenance et dépannage électrique</option>
+          <option>Installation panneaux solaires</option>
+          <option>Installation résidentielle</option>
+          <option>Installation commerciale / industrielle</option>
+          <option>Démarrage moteur</option>
+          <option>Autre</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Message (optionnel)</label>
+        <textarea id="clientMessage" placeholder="Décrivez votre problème ou votre besoin..."></textarea>
+      </div>
+      <button class="submit-btn" id="submitBtn" onclick="submitRequest()">📨 Envoyer la demande</button>
+      <div class="alert success" id="successMsg">✅ Demande envoyée ! Nous vous contacterons très bientôt.</div>
+      <div class="alert error" id="errorMsg"></div>
+    </div>
+  </div>
+
+  <div class="contact-bar">
+    📞 Contactez-nous : <a href="tel:+237680340430">(+237) 680340430</a> / <a href="tel:+237698019222">698019222</a>
+  </div>
+</div>
+
+<!-- ===== PAGE ADMIN LOGIN ===== -->
+<div id="pageAdminLogin" class="page admin-page">
+  <div class="admin-login">
+    <div class="login-card">
+      <h2>🔒 ADMIN</h2>
+      <p>Connexion espace administrateur</p>
+      <div class="form-row">
+        <label>Nom d'utilisateur</label>
+        <input type="text" id="adminUser" value="admin" placeholder="admin">
+      </div>
+      <div class="form-row">
+        <label>Mot de passe</label>
+        <input type="password" id="adminPwd" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <button class="submit-btn" id="loginBtn" onclick="doLogin()">Se connecter</button>
+      <div class="alert error" id="loginError" style="display:none;margin-top:1rem;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE ADMIN DASHBOARD ===== -->
+<div id="pageAdmin" class="page admin-page">
+  <div class="admin-header">
+    <div class="admin-title">⚡ TL <span>ELECT</span> — Tableau de bord</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="action-btn btn-refresh" onclick="loadAdmin()">🔄 Actualiser</button>
+      <button class="action-btn btn-delete" onclick="logout()">🚪 Déconnexion</button>
+    </div>
+  </div>
+
+  <div class="stats-bar" id="statsBar">
+    <div class="stat-card"><div class="stat-num">—</div><div class="stat-label">Total</div></div>
+  </div>
+
+  <div class="admin-toolbar">
+    <button class="filter-btn active" id="filterAll" onclick="setFilter('all')">Toutes</button>
+    <button class="filter-btn" id="filterNew" onclick="setFilter('new')">🔔 Nouvelles</button>
+    <button class="filter-btn" id="filterDone" onclick="setFilter('done')">✅ Traitées</button>
+    <input class="search-input" id="searchInput" type="text" placeholder="🔍 Rechercher..." oninput="renderRequests()">
+  </div>
+
+  <div class="requests-container">
+    <div class="requests-title" id="reqCount">📋 DEMANDES</div>
+    <div id="requestsList"><div class="empty-state"><div class="empty-icon">⏳</div><p>Chargement...</p></div></div>
+  </div>
+</div>
+
+<script>
+  // ===== CONFIG =====
+  // En production, remplace par l'URL de ton serveur, ex: 'https://monserveur.com'
+  const API_BASE = window.location.origin;
+
+  let adminToken = sessionStorage.getItem('tl_admin_token') || null;
+  let allRequests = [];
+  let currentFilter = 'all';
+
+  // ===== PAGE NAV =====
+  function showPage(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    ['btnClient','btnAdmin'].forEach(b => document.getElementById(b).classList.replace('active','inactive'));
+    document.getElementById('page' + page.charAt(0).toUpperCase() + page.slice(1))?.classList.add('active') ||
+    document.getElementById('pageAdmin' + page.charAt(0).toUpperCase() + page.slice(1))?.classList.add('active');
+
+    if (page === 'client') {
+      document.getElementById('pageClient').classList.add('active');
+      document.getElementById('btnClient').classList.replace('inactive','active');
+    } else if (page === 'adminLogin') {
+      document.getElementById('pageAdminLogin').classList.add('active');
+      document.getElementById('btnAdmin').classList.replace('inactive','active');
+    } else if (page === 'admin') {
+      document.getElementById('pageAdmin').classList.add('active');
+      document.getElementById('btnAdmin').classList.replace('inactive','active');
+      loadAdmin();
+    }
+  }
+
+  // ===== CLIENT FORM =====
+  async function submitRequest() {
+    const name = document.getElementById('clientName').value.trim();
+    const phone = document.getElementById('clientPhone').value.trim();
+    const address = document.getElementById('clientAddress').value.trim();
+    const service = document.getElementById('clientService').value;
+    const message = document.getElementById('clientMessage').value.trim();
+
+    document.getElementById('successMsg').style.display = 'none';
+    document.getElementById('errorMsg').style.display = 'none';
+
+    if (!name || !phone || !address || !service) {
+      showAlert('errorMsg', '⚠️ Veuillez remplir tous les champs obligatoires (*)');
+      return;
+    }
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Envoi en cours...';
+
+    try {
+      const res = await fetch(`${API_BASE}/api/requests`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, phone, address, service, message })
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        ['clientName','clientPhone','clientAddress','clientMessage'].forEach(id => document.getElementById(id).value = '');
+        document.getElementById('clientService').value = '';
+        showAlert('successMsg', '✅ ' + data.message);
+      } else {
+        const errs = data.errors ? data.errors.join(', ') : data.error;
+        showAlert('errorMsg', '❌ ' + errs);
+      }
+    } catch(e) {
+      showAlert('errorMsg', '❌ Erreur de connexion au serveur. Veuillez réessayer.');
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = '📨 Envoyer la demande';
+  }
+
+  function showAlert(id, msg) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.style.display = 'block';
+    setTimeout(() => el.style.display = 'none', 5000);
+  }
+
+  // ===== ADMIN LOGIN =====
+  async function doLogin() {
+    const username = document.getElementById('adminUser').value.trim();
+    const password = document.getElementById('adminPwd').value;
+    const errEl = document.getElementById('loginError');
+    const btn = document.getElementById('loginBtn');
+
+    errEl.style.display = 'none';
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Connexion...';
+
+    try {
+      const res = await fetch(`${API_BASE}/api/admin/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        adminToken = data.token;
+        sessionStorage.setItem('tl_admin_token', adminToken);
+        document.getElementById('adminPwd').value = '';
+        showPage('admin');
+      } else {
+        errEl.textContent = '❌ ' + data.error;
+        errEl.style.display = 'block';
+      }
+    } catch(e) {
+      errEl.textContent = '❌ Erreur de connexion au serveur.';
+      errEl.style.display = 'block';
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = 'Se connecter';
+  }
+
+  function logout() {
+    adminToken = null;
+    sessionStorage.removeItem('tl_admin_token');
+    showPage('adminLogin');
+  }
+
+  // ===== ADMIN DATA =====
+  async function loadAdmin() {
+    await Promise.all([loadStats(), loadRequests()]);
+  }
+
+  async function loadStats() {
+    try {
+      const res = await fetch(`${API_BASE}/api/admin/stats`, {
+        headers: { 'Authorization': 'Bearer ' + adminToken }
+      });
+      if (res.status === 401) { logout(); return; }
+      const data = await res.json();
+      const s = data.stats;
+      document.getElementById('statsBar').innerHTML = `
+        <div class="stat-card"><div class="stat-num">${s.total}</div><div class="stat-label">Total</div></div>
+        <div class="stat-card"><div class="stat-num orange">${s.new_count}</div><div class="stat-label">Nouvelles</div></div>
+        <div class="stat-card"><div class="stat-num green">${s.done_count}</div><div class="stat-label">Traitées</div></div>
+      `;
+    } catch(e) {}
+  }
+
+  async function loadRequests() {
+    try {
+      const res = await fetch(`${API_BASE}/api/admin/requests`, {
+        headers: { 'Authorization': 'Bearer ' + adminToken }
+      });
+      if (res.status === 401) { logout(); return; }
+      const data = await res.json();
+      allRequests = data.requests;
+      renderRequests();
+    } catch(e) {
+      document.getElementById('requestsList').innerHTML = '<div class="empty-state"><div class="empty-icon">❌</div><p>Impossible de charger les demandes.</p></div>';
+    }
+  }
+
+  function setFilter(f) {
+    currentFilter = f;
+    ['all','new','done'].forEach(x => {
+      document.getElementById('filter' + x.charAt(0).toUpperCase() + x.slice(1))
+        .classList.toggle('active', x === f);
+    });
+    renderRequests();
+  }
+
+  function renderRequests() {
+    const search = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
+    let list = allRequests;
+
+    if (currentFilter !== 'all') list = list.filter(r => r.status === currentFilter);
+    if (search) list = list.filter(r =>
+      r.name.toLowerCase().includes(search) ||
+      r.phone.includes(search) ||
+      r.address.toLowerCase().includes(search) ||
+      r.service.toLowerCase().includes(search)
+    );
+
+    document.getElementById('reqCount').textContent = `📋 DEMANDES (${list.length})`;
+
+    if (list.length === 0) {
+      document.getElementById('requestsList').innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">${search ? '🔍' : '📭'}</div>
+          <p>${search ? 'Aucun résultat pour "' + search + '"' : 'Aucune demande pour le moment.'}</p>
+        </div>`;
+      return;
+    }
+
+    document.getElementById('requestsList').innerHTML = list.map(req => `
+      <div class="request-card ${req.status}" id="card-${req.id}">
+        <div class="req-header">
+          <div class="req-name">👤 ${req.name}</div>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span class="req-time">🕐 ${req.created_at}</span>
+            <span class="req-badge ${req.status === 'new' ? 'badge-new' : 'badge-done'}">
+              ${req.status === 'new' ? '🔔 Nouvelle' : '✅ Traitée'}
+            </span>
+          </div>
+        </div>
+        <div class="req-info">
+          <div class="req-field">
+            <span class="req-field-icon">📞</span>
+            <div>
+              <span class="req-field-label">Téléphone</span>
+              <span class="req-field-value">${req.phone}</span>
+            </div>
+          </div>
+          <div class="req-field">
+            <span class="req-field-icon">📍</span>
+            <div>
+              <span class="req-field-label">Adresse</span>
+              <span class="req-field-value">${req.address}</span>
+            </div>
+          </div>
+        </div>
+        <div class="req-service">🔌 <strong>Service :</strong> ${req.service}</div>
+        ${req.message ? `<div class="req-service" style="color:#555;">💬 ${req.message}</div>` : ''}
+        <div class="req-actions">
+          <button class="action-btn btn-call" onclick="window.open('tel:${req.phone}')">📞 Appeler</button>
+          ${req.status === 'new'
+            ? `<button class="action-btn btn-done" onclick="updateStatus(${req.id},'done')">✅ Marquer traitée</button>`
+            : `<button class="action-btn btn-undo" onclick="updateStatus(${req.id},'new')">🔄 Remettre en attente</button>`}
+          <button class="action-btn btn-delete" onclick="deleteReq(${req.id})">🗑️ Supprimer</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  async function updateStatus(id, status) {
+    try {
+      await fetch(`${API_BASE}/api/admin/requests/${id}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + adminToken },
+        body: JSON.stringify({ status })
+      });
+      await loadAdmin();
+    } catch(e) { alert('Erreur lors de la mise à jour'); }
+  }
+
+  async function deleteReq(id) {
+    if (!confirm('Supprimer cette demande définitivement ?')) return;
+    try {
+      await fetch(`${API_BASE}/api/admin/requests/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': 'Bearer ' + adminToken }
+      });
+      await loadAdmin();
+    } catch(e) { alert('Erreur lors de la suppression'); }
+  }
+
+  // Auto-login si token existant
+  if (adminToken && window.location.hash === '#admin') showPage('admin');
+</script>
+</body>
+</html>
